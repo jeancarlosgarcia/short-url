@@ -1,0 +1,12 @@
+.vscode
+.idea
+env.sh
+*.json
+*.bin
+*.html
+*.txt
+coverage.out
+.tool-versions
+
+# Mac
+.DS_Store
