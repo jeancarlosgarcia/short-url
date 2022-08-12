@@ -6,6 +6,7 @@ import (
 	"short-url/interfaces"
 	"short-url/models/api"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 )
@@ -40,7 +41,9 @@ func (urlHandler *URLHandler) CreateURL(c echo.Context) error {
 
 func (urlHandler *URLHandler) RedirectURL(c echo.Context) error {
 	url, err := urlHandler.urlService.GetOriginal(c.Request().Context(), c.Param("shortURL"))
-	if err != nil {
+	if err == redis.Nil {
+		return echo.NewHTTPError(http.StatusNotFound, "url invalid")
+	} else {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
