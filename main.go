@@ -11,7 +11,9 @@ import (
 	"short-url/repository"
 	"short-url/service"
 
+	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 const prefix = "api/short-url"
@@ -23,7 +25,12 @@ var (
 
 func main() {
 	e := echo.New()
+
 	router := e.Group(prefix)
+
+	// Enable metrics middleware
+	p := prometheus.NewPrometheus("echo", nil)
+	p.Use(e)
 
 	health := component.NewHealth(handler.NewHealthCheckHandler(), router)
 	health.Routes()
@@ -39,5 +46,6 @@ func main() {
 	url := component.NewUrl(handler.NewURLHandler(urlService), router)
 	url.Routes()
 
+	log.Infof(fmt.Sprintf("server is ready to handle requests %s:%d", serverHost, serverPort))
 	e.Logger.Fatal(e.Start(fmt.Sprintf("%s:%d", serverHost, serverPort)))
 }
