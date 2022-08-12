@@ -18,7 +18,6 @@ func NewRedisConnection() *redis.Client {
 
 	client := redis.NewClient(&redis.Options{
 		Addr:         address,
-		PoolSize:     40,
 		MinIdleConns: 3,
 		IdleTimeout:  3 * time.Minute,
 	})
