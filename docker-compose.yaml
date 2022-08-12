@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  golang-short-url-app:
+    image: short-url-app
+    build: .
+    ports:
+      - 8081:8081
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8081
+      - DB_USER=root
+      - DB_PASSWORD=secret
+      - DB_DATABASE=postgres
+      - DB_HOST=postgres-short-url-app:5432
+      - REDIS_PASSWORD=
+      - REDIS_HOST=redis-short-url-app
+      - REDIS_PORT=6379
+    depends_on:
+      - postgres-short-url-app
+      - redis-short-url-app
+    networks:
+      - default
+
+  postgres-short-url-app:
+    image: postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret
+
+  redis-short-url-app:
+    image: redis
