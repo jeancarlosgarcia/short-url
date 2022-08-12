@@ -28,7 +28,7 @@ func (u URLRepository) Save(ctx context.Context, shortURL *models.ShortURL) erro
 		return err
 	}
 
-	err = u.cache.Set(ctx, composeKeys(shortURL.Short), shortURL.Original, 10 * time.Minute)
+	err = u.cache.Set(ctx, composeKeys(shortURL.Short), shortURL.Original, 720 * time.Hour)
 	if err != nil {
 		log.Error("error set cache: "+ err.Error()+ " short: "+shortURL.Short)
 
