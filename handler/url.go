@@ -44,7 +44,10 @@ func (urlHandler *URLHandler) RedirectURL(c echo.Context) error {
 	if err == redis.Nil {
 		return echo.NewHTTPError(http.StatusNotFound, "url invalid")
 	} else {
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err)
+		}
+
 	}
 
 	return c.Redirect(http.StatusMovedPermanently, url)
